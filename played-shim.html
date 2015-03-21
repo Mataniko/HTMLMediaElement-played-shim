@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>HTMLMediaElement played shim</title>
+</head>
+<body>
+  <video id="contentElement" preload="none" controls poster="http://media.w3.org/2010/05/bunny/poster.png">
+    <source id="mp4" src="http://media.w3.org/2010/05/bunny/movie.mp4" type="video/mp4">
+  </video>
+  <div id="output"></div>
+</body>
+<script src="played-shim.js"></script>
+
+<script>
+  // Create a function that will continously send our shim the current media time
+  function onTimeUpdate(callback) {
+    document.querySelector('video').addEventListener('timeupdate', function(e) {
+      callback(e.target.currentTime);
+    });
+  }
+    
+  var played = new playedShim(onTimeUpdate);
+
+  setInterval(function() {
+    if (played.length() === 0) return;
+    document.getElementById("output").innerText = JSON.stringify(played.toArray());
+  }, 1000)
+</script>
+</html>
